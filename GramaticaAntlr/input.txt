@@ -1,0 +1,16 @@
+/* Sistema de Combate
+    Gramatica ANTLR
+*/
+
+// Verificar si el jugador tiene vida suficiente
+if (puntosVida > 50) {
+    estadoJugador = 1; // Saludable
+    fuerzaAtaque = 100;
+} else {
+    // Activar modo defensa
+    estadoJugador = 0; 
+    fuerzaAtaque = 25;
+}
+
+// Registro de log final
+debugMode = 0;

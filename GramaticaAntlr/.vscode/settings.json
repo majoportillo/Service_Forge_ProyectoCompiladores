@@ -1,0 +1,9 @@
+{
+"antlr4.generation": {
+    "mode": "external",
+    "language": "Python3",
+    "visitors": true,
+    "listeners": true,
+    "outputDir": "output"
+}
+}
