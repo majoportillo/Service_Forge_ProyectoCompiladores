@@ -69,7 +69,8 @@ def compile(archivo):
     generador = GeneradorFlask(nombre_api, base_path)
     ParseTreeWalker().walk(generador, arbol)
     
-    with open("app_generada.py", "w", encoding="utf-8") as f:
+    app_path = os.path.join(os.path.dirname(__file__), "app_generada.py")
+    with open(app_path, "w", encoding="utf-8") as f:
         f.write(generador.obtener_codigo_completo())
     click.secho("✔ Compilación exitosa: 'app_generada.py' creado.", fg="green")
 
@@ -98,8 +99,9 @@ def start(port):
     click.secho(f"🚀 Iniciando servicio en puerto {port}...", fg="magenta", bold=True)
     
     # Iniciamos el proceso de forma independiente
+    app_path = os.path.join(os.path.dirname(__file__), "app_generada.py")
     proceso = subprocess.Popen(
-        [sys.executable, "app_generada.py"],
+        [sys.executable, app_path],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
@@ -121,7 +123,7 @@ def stop():
     try:
         os.kill(pid, signal.SIGTERM)
         os.remove(PID_FILE)
-        click.secho("🛑 Servicio detenido correctamente.", fg="yellow", bold=True)
+        click.secho("Servicio detenido correctamente.", fg="yellow", bold=True)
     except OSError:
         click.echo("El proceso ya no existe. Limpiando rastro...")
         os.remove(PID_FILE)

@@ -15,22 +15,22 @@ class GeneradorFlask(ServiceForgeListener):
 
     def enterEndpointLine(self, ctx: ServiceForgeParser.EndpointLineContext):
         metodo = ctx.httpMethod().getText()
-        # Limpiamos la ruta y concatenamos con la base de la API
+        
         ruta_relativa = ctx.PATH().getText()
         ruta_final = f"{self.base_path}{ruta_relativa}".replace('{', '<').replace('}', '>')
         
-        # Creamos una función dummy para cada endpoint
+        
         nombre_func = f"{metodo.lower()}_{ruta_relativa.replace('/', '_').replace('{', '').replace('}', '')}"
         
         seccion_ruta = (
             f"@app.route('{ruta_final}', methods=['{metodo}'])\n"
             f"def {nombre_func}():\n"
-            f"    return jsonify({{'message': 'Endpoint {ruta_final} ejecutado con éxito'}})\n"
+            f"    return jsonify({{'message': 'Endpoint {ruta_final} ejecutado con exito'}}), 200\n"
         )
         self.rutas.append(seccion_ruta)
 
     def obtener_codigo_completo(self):
-        # Unimos todas las partes
+        
         cuerpo = "\n".join(self.rutas)
         footer = "\nif __name__ == '__main__':\n    app.run(debug=True, port=5000)"
         return "\n".join(self.codigo) + "\n" + cuerpo + footer
