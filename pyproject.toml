@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "serviceforge"
+version = "1.0.0"
+description = "ServiceForge CLI - Generador de microservicios REST"
+dependencies = [
+    "click",
+    "flask",
+    "antlr4-python3-runtime"
+]
+
+[project.scripts]
+# Esto enlaza el comando 'sforge' con la función 'cli' de tu main.py
+sforge = "serviceforge.main:cli"
+
+[tool.setuptools]
+# Le decimos explícitamente a Python qué carpetas incluyen código
+packages = ["serviceforge", "serviceforge.sforge", "serviceforge.grammar"]

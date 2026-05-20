@@ -34,3 +34,30 @@ class GeneradorFlask(ServiceForgeListener):
         cuerpo = "\n".join(self.rutas)
         footer = "\nif __name__ == '__main__':\n    app.run(debug=True, port=5000)"
         return "\n".join(self.codigo) + "\n" + cuerpo + footer
+    
+
+class GeneradorNode(ServiceForgeListener):
+    def __init__(self, nombre_api, base_path):
+        self.nombre_api = nombre_api
+        self.base_path = base_path
+        self.codigo = []
+        self.codigo.append("const express = require('express');")
+        self.codigo.append("const app = express();")
+        self.codigo.append("app.use(express.json());\n")
+
+    def enterEndpointLine(self, ctx):
+        metodo = ctx.httpMethod().getText().lower()
+        ruta = ctx.PATH().getText()
+        # En Node.js (Express), las variables de ruta usan ':' en lugar de '{}' (ej: /users/:id)
+        ruta_express = ruta.replace('{', ':').replace('}', '')
+        ruta_completa = f"{self.base_path}{ruta_express}".replace('//', '/')
+        
+        self.codigo.append(f"app.{metodo}('{ruta_completa}', (req, res) => {{")
+        self.codigo.append(f"    res.status(200).json({{ message: 'Endpoint {ruta_completa} ejecutado con éxito' }});")
+        self.codigo.append("});\n")
+
+    def obtener_codigo_completo(self):
+        self.codigo.append(f"app.listen(3000, () => {{")
+        self.codigo.append(f"    console.log('Servidor {self.nombre_api} corriendo en http://localhost:3000');")
+        self.codigo.append(f"}});")
+        return "\n".join(self.codigo)

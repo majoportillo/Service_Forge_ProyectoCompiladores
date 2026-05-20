@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: serviceforge
+Version: 1.0.0
+Summary: ServiceForge CLI - Generador de microservicios REST
+Requires-Dist: click
+Requires-Dist: flask
+Requires-Dist: antlr4-python3-runtime

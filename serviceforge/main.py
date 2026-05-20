@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from sforge.sintactico import analizar_sintactico
-from sforge.generator import GeneradorFlask 
+from sforge.generator import GeneradorFlask, GeneradorNode
 from sforge.semantic_analyzer import AnalizadorSemantico
 from grammar.ServiceForgeListener import ServiceForgeListener
 from grammar.ServiceForgeParser import ServiceForgeParser
@@ -52,27 +52,41 @@ def validate(archivo):
             click.secho(f"  -> {err}", fg="yellow")
         sys.exit(1)  #si hay errores se detiene
     else:
-        click.secho("\n✔ El archivo es válido sintáctica y semánticamente.", fg="green", bold=True)
+        click.secho("\n El archivo es válido sintáctica y semánticamente.", fg="green", bold=True)
+
 
 # --- 5. COMANDO: sforge compile ---
 @cli.command()
 @click.argument('archivo', type=click.Path(exists=True))
-def compile(archivo):
-    """Genera el código fuente Flask."""
+@click.option('--target', default='python', help='Lenguaje destino (python o node)')
+def compile(archivo, target):
+    """Genera el código fuente (Flask o Express)."""
     arbol, errores = analizar_sintactico(archivo)
-    if errores: return
+    if errores: 
+        return
 
     api_ctx = arbol.apiBlock(0)
     nombre_api = api_ctx.IDENTIFIER().getText()
     base_path = next((opt.getChild(2).getText() for opt in api_ctx.apiOption() if opt.getChild(0).getText() == 'base'), "/")
 
-    generador = GeneradorFlask(nombre_api, base_path)
-    ParseTreeWalker().walk(generador, arbol)
-    
-    app_path = os.path.join(os.path.dirname(__file__), "app_generada.py")
-    with open(app_path, "w", encoding="utf-8") as f:
-        f.write(generador.obtener_codigo_completo())
-    click.secho("✔ Compilación exitosa: 'app_generada.py' creado.", fg="green")
+    walker = ParseTreeWalker()
+
+    if target.lower() == 'python':
+        generador = GeneradorFlask(nombre_api, base_path)
+        walker.walk(generador, arbol)
+        with open("app_generada.py", "w", encoding="utf-8") as f:
+            f.write(generador.obtener_codigo_completo())
+        click.secho("✔ Compilación exitosa: 'app_generada.py' creado.", fg="green")
+        
+    elif target.lower() == 'node':
+        generador = GeneradorNode(nombre_api, base_path)
+        walker.walk(generador, arbol)
+        with open("app_generada.js", "w", encoding="utf-8") as f:
+            f.write(generador.obtener_codigo_completo())
+        click.secho("✔ Compilación exitosa: 'app_generada.js' creado.", fg="cyan")
+        
+    else:
+        click.secho(f"✖ Error: Target '{target}' no soportado. Usa 'python' o 'node'.", fg="red")
 
 # --- 6. COMANDO: sforge routes ---
 @cli.command()
