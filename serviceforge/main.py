@@ -23,5 +23,6 @@ def main():
         print(f"  {len(errores)} error(es) encontrado(s)")
     print("="*60 + "\n")
 
+
 if __name__ == "__main__":
     main()
