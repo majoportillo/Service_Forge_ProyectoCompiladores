@@ -496,7 +496,9 @@ def create_user():
 
 ## Otro ejemplo antes
 
-```svc
+```svcc
+
+
 service ProductService
 
 endpoint GET /products -> list(Product)
