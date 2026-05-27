@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: serviceforge-umg
+Version: 1.0.0
+Summary: Generador y gestor de microservicios REST desde consola
+Author: Maria Jose, Astrid, Ergil, Angel, Jorge
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/plain
+
+ServiceForge es una herramienta CLI para automatizar la creacion de microservicios RESTful usando un DSL (.svc).

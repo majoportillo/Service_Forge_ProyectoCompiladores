@@ -1,0 +1,8 @@
+api MiApiIncreible version = 1.0 base = /api
+
+resource Clientes
+fields: id int pk, nombre string required
+endpoint GET /listar -> Clientes
+endpoint POST /crear -> Clientes
+endpoint GET /buscar/{id} -> Clientes
+
