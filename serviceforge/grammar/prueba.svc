@@ -1,9 +1,0 @@
-api Users version=1.0 base=/api/v1
-  resource User
-    fields: id int pk, name string required, correo string unique, created_at datetime 
-    endpoint GET /users -> list(User) paginated
-    
-    endpoint POST /users -> create(User) with validation
-    endpoint GET /users/{id} auth=jwt -> detail(User)
-    relationship posts (has_many Post)
-    
