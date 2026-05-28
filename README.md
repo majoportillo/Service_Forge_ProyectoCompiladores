@@ -103,9 +103,82 @@ Apaga de forma segura el servidor backend que está corriendo en segundo plano, 
 sforge stop
 ```
 ## Sintaxis del Lenguaje (DSL) y Gramática
-(Sección a cargo de Majo)
 
-A continuación se detallan las reglas de sintaxis del lenguaje ServiceForge, la definición de tipos admitidos, bloques de servicios y la estructura formal de los endpoints:
+ServiceForge utiliza archivos con extensión `.svc` para definir microservicios REST de forma declarativa.
+
+### Estructura general
+
+```
+api <NombreAPI> version=<versión> base=<ruta_base>
+  resource <NombreRecurso>
+    fields: <campo> <tipo> <modificador>, ...
+    endpoint <MÉTODO> <ruta> -> <acción>(<Recurso>)
+    relationship <nombre> (<tipo> <Recurso>)
+```
+
+### Tipos de datos disponibles
+
+| Tipo | Descripción |
+|---|---|
+| `int` | Número entero |
+| `string` | Cadena de texto |
+| `boolean` | Verdadero o falso |
+| `decimal` | Número decimal |
+| `datetime` | Fecha y hora |
+| `uuid` | Identificador único |
+| `email` | Correo electrónico |
+
+### Modificadores de campo
+
+| Modificador | Descripción |
+|---|---|
+| `pk` | Llave primaria |
+| `required` | Campo obligatorio |
+| `unique` | Valor único |
+| `default=<valor>` | Valor por defecto |
+
+### Métodos HTTP soportados
+
+`GET` `POST` `PUT` `DELETE` `PATCH`
+
+### Opciones de endpoint
+
+| Opción | Descripción |
+|---|---|
+| `auth=jwt` | Requiere autenticación JWT |
+| `paginated` | Resultado paginado |
+| `with validation` | Aplica validaciones al crear |
+
+### Tipos de relación
+
+| Tipo | Descripción |
+|---|---|
+| `has_many` | Uno a muchos |
+| `has_one` | Uno a uno |
+| `belongs_to` | Pertenece a |
+
+### Ejemplo completo
+
+```svc
+api Users version=1.0 base=/api/v1
+  resource User
+    fields: id int pk, name string required, correo string unique, created_at datetime
+    endpoint GET /users -> list(User) paginated
+    endpoint POST /users -> create(User) with validation
+    endpoint GET /users/{id} auth=jwt -> detail(User)
+    relationship posts (has_many Post)
+```
+
+### Ejemplo simple
+
+```svc
+api MiApi version=1.0 base=/api
+  resource Clientes
+    fields: id int pk, nombre string required
+    endpoint GET /listar -> Clientes
+    endpoint POST /crear -> Clientes
+    endpoint GET /buscar/{id} -> Clientes
+```
 
 ---
 
