@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  miapiincreible:
+  usermanagement:
     build: .
     ports:
       - "5000:5000"
