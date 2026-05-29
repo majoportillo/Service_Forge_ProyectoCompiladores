@@ -1,8 +1,0 @@
-README.md
-setup.py
-serviceforge_umg.egg-info/PKG-INFO
-serviceforge_umg.egg-info/SOURCES.txt
-serviceforge_umg.egg-info/dependency_links.txt
-serviceforge_umg.egg-info/entry_points.txt
-serviceforge_umg.egg-info/requires.txt
-serviceforge_umg.egg-info/top_level.txt

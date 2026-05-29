@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+serviceforge/main.py
+serviceforge/parser.py
+serviceforge/testparser.py
+serviceforge.egg-info/PKG-INFO
+serviceforge.egg-info/SOURCES.txt
+serviceforge.egg-info/dependency_links.txt
+serviceforge.egg-info/entry_points.txt
+serviceforge.egg-info/requires.txt
+serviceforge.egg-info/top_level.txt
+serviceforge/sforge/generator.py
+serviceforge/sforge/lexer.py
+serviceforge/sforge/lexico.py
+serviceforge/sforge/semantic_analyzer.py
+serviceforge/sforge/sintactico.py

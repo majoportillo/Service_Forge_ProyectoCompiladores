@@ -1,5 +1,5 @@
-'''“Este archivo prueba flujos de autenticación, validaciones, autenticación JWT y relaciones entre
- recursos para verificar que el compilador soporte estructuras complejas'''
+# Este archivo prueba flujos de autenticación, validaciones,
+# autenticación JWT y relaciones entre recursos.
 
 
 
