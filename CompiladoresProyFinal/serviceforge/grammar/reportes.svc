@@ -8,9 +8,18 @@ endpoint POST /reportes auth=jwt with generarReporte -> Reportes
 endpoint PATCH /reportes/{id} auth=jwt with actualizarEstado -> Reportes
 endpoint DELETE /reportes/{id} auth=jwt -> Reportes
 relationship detalles (has_many DetalleReporte)
+relationship exportaciones (has_many ExportacionReporte)
 
 resource DetalleReporte
 fields: id int pk, reporte_id int required, descripcion string required, cantidad int min = 0, monto decimal default = 0
 endpoint GET /reportes/{id}/detalles auth=jwt paginated -> DetalleReporte paginated
 endpoint POST /reportes/{id}/detalles auth=jwt with agregarDetalle -> DetalleReporte
+endpoint DELETE /reportes/{id}/detalles/{detalle_id} auth=jwt -> DetalleReporte
+relationship reporte (belongs_to Reportes)
+
+resource ExportacionReporte
+fields: id int pk, reporte_id int required, formato string required, ruta_archivo string required, fecha_exportacion datetime required, descargado boolean default = false
+endpoint GET /reportes/{id}/exportaciones auth=jwt paginated -> ExportacionReporte paginated
+endpoint POST /reportes/{id}/exportaciones auth=jwt with exportarReporte -> ExportacionReporte
+endpoint GET /reportes/{id}/exportaciones/{exportacion_id} auth=jwt -> ExportacionReporte
 relationship reporte (belongs_to Reportes)
