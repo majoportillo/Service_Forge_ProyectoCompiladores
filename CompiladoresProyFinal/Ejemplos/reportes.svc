@@ -1,0 +1,25 @@
+api ReportesService version=1.0 base=/api
+
+resource Reportes
+  fields: id int pk, titulo string required, tipo string required, fecha_inicio datetime required, fecha_fin datetime required, total decimal default=0, activo boolean default=true
+  endpoint GET /reportes auth=jwt -> list(Reportes) paginated
+  endpoint GET /reportes/{id} auth=jwt -> detail(Reportes)
+  endpoint POST /reportes auth=jwt -> create(Reportes) with validation
+  endpoint PATCH /reportes/{id} auth=jwt -> update(Reportes)
+  endpoint DELETE /reportes/{id} auth=jwt -> delete(Reportes)
+  relationship detalles (has_many DetalleReporte)
+  relationship exportaciones (has_many ExportacionReporte)
+
+resource DetalleReporte
+  fields: id int pk, reporte_id int required, descripcion string required, cantidad int min=0, monto decimal default=0
+  endpoint GET /reportes/{id}/detalles auth=jwt -> list(DetalleReporte) paginated
+  endpoint POST /reportes/{id}/detalles auth=jwt -> create(DetalleReporte) with validation
+  endpoint DELETE /reportes/{id}/detalles/{detalle_id} auth=jwt -> delete(DetalleReporte)
+  relationship reporte (belongs_to Reportes)
+
+resource ExportacionReporte
+  fields: id int pk, reporte_id int required, formato string required, ruta_archivo string required, fecha_exportacion datetime required, descargado boolean default=false
+  endpoint GET /reportes/{id}/exportaciones auth=jwt -> list(ExportacionReporte) paginated
+  endpoint POST /reportes/{id}/exportaciones auth=jwt -> create(ExportacionReporte) with validation
+  endpoint GET /reportes/{id}/exportaciones/{exportacion_id} auth=jwt -> detail(ExportacionReporte)
+  relationship reporte (belongs_to Reportes)
